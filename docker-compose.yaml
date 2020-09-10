@@ -10,6 +10,9 @@ services:
     environment:
       DATABASE_URL: postgres://spidey:123456@account_db/spidey?sslmode=disable
     restart: on-failure
+    # for testing purpose
+    ports:
+      - 8080:8080
 
   catalog:
     build:
