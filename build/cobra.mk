@@ -24,11 +24,12 @@ test: ## test
 # Cobra: https://github.com/spf13/cobra
 # ---
 
+# https://github.com/spf13/cobra/issues/1215#issuecomment-686429510
 .PHONY: install-cobra
 install-cobra:
 	$(eval GOGET ?= go get -u -v)
 	@hash cobra > /dev/null 2>&1; if [ $$? -ne 0 ]; then \
-		$(GOGET) github.com/spf13/cobra/cobra; \
+		$(GOGET) github.com/spf13/cobra/cobra@v1.0.0; \
 	fi
 
 # ---
