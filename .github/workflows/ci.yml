@@ -22,8 +22,15 @@ jobs:
         shell: bash
       - name: Checkout code
         uses: actions/checkout@v2
-      - name: CI
+      - name: setup grpc
         run: |
           make -f build/grpc.mk install
-          make -f build/grpc.mk test
           make -f build/grpc.mk protoc
+          make -f build/grpc.mk test
+      - name: setup cobra
+        run: |
+          make -f build/cobra.mk install
+          make -f build/cobra.mk init
+          make -f build/cobra.mk add CMD=test
+          make -f build/cobra.mk build
+          make -f build/cobra.mk test
