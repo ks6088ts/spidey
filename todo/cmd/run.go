@@ -22,36 +22,50 @@ THE SOFTWARE.
 package cmd
 
 import (
-	"fmt"
+	"log"
 
+	"github.com/ks6088ts/spidey/todo/repository"
+	"github.com/ks6088ts/spidey/todo/service"
 	"github.com/spf13/cobra"
 )
 
-// runCmd represents the run command
-var runCmd = &cobra.Command{
-	Use:   "run",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
+type runOptions struct {
+	databaseURL string
+}
 
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
-	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("run called")
-	},
+func newRunCmd() *cobra.Command {
+	o := runOptions{}
+	cmd := &cobra.Command{
+		Use:   "run",
+		Short: "A brief description of your command",
+		Long: `A longer description that spans multiple lines and likely contains examples
+	and usage of using your command. For example:
+	
+	Cobra is a CLI library for Go that empowers applications.
+	This application is a tool to generate the needed files
+	to quickly create a Cobra application.`,
+		Run: func(cmd *cobra.Command, args []string) {
+
+			var r repository.Repository
+			r, err := repository.NewPostgresRepository(o.databaseURL)
+			if err != nil {
+				log.Println(err)
+				return
+			}
+			defer r.Close()
+
+			log.Println("Listening on port 8080...")
+			s := service.NewService(r)
+			log.Fatal(service.ListenGRPC(s, 8080))
+		},
+	}
+
+	cmd.PersistentFlags().StringVarP(&o.databaseURL, "url", "u", "postgres://spidey:123456@localhost/spidey?sslmode=disable", "database URL")
+
+	return cmd
 }
 
 func init() {
-	rootCmd.AddCommand(runCmd)
-
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// runCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// runCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	cmd := newRunCmd()
+	rootCmd.AddCommand(cmd)
 }

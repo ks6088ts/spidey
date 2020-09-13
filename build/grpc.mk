@@ -1,5 +1,6 @@
 OS ?= $(shell uname)
 GOGET ?= go get -u -v
+GOINSTALL ?= go install
 
 # ---
 # Common
@@ -37,6 +38,15 @@ ifeq ($(OS),Darwin)
 	rm -f $(PROTOC_ZIP)
 else ifeq ($(OS),Linux)
 	sudo apt-get install -y protobuf-compiler
+else
+	@# windows
+	$(eval PROTOC_VERSION ?= 3.13.0)
+	$(eval PROTOC_PLATFORM ?= win64)
+	$(eval PROTOC_ZIP ?= protoc-$(PROTOC_VERSION)-$(PROTOC_PLATFORM).zip)
+	curl -OL https://github.com/protocolbuffers/protobuf/releases/download/v$(PROTOC_VERSION)/$(PROTOC_ZIP)
+	unzip -o $(PROTOC_ZIP) -d $(GOPATH) bin/protoc.exe
+	unzip -o $(PROTOC_ZIP) -d $(GOPATH) 'include/*'
+	rm -f $(PROTOC_ZIP)
 endif
 
 # https://grpc.io/docs/languages/go/quickstart/
@@ -44,12 +54,18 @@ endif
 install-protoc-go: ## install Go plugin for protocol buffers
 	$(GOGET) github.com/golang/protobuf/protoc-gen-go
 
+# https://github.com/fullstorydev/grpcurl
+.PHONY: install-grpcurl
+install-grpcurl: ## install grpcurl
+	$(GOGET) github.com/fullstorydev/grpcurl/...
+	$(GOINSTALL) github.com/fullstorydev/grpcurl/cmd/grpcurl
+
 # ---
 # Project
 # ---
 
 .PHONY: protoc
-protoc:
+protoc: ## compile proto files
 	$(eval PROTO_DIR ?= todo/protos)
 	$(eval PROTO_FILE ?= $(PROTO_DIR)/todo.proto)
 	protoc \

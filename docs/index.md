@@ -40,7 +40,7 @@ pb.AccountService.PostAccount
 {
 "name": "hello"
 }
-^Z
+EOM # WindowsではCtrl+Z、Unix系ではCtrl+D
 {
   "account": {
     "id": "1hJCwfq0SuSWNrTA1VuNHxLhUkL",
