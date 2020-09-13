@@ -1,0 +1,44 @@
+syntax = "proto3";
+
+option go_package = "todo/pb";
+
+package pb;
+
+message Todo {
+    string id = 1;
+    string name = 2;
+}
+
+message PostTodoRequest {
+    string name = 1;
+}
+
+message PostTodoResponse {
+    Todo todo = 1;
+}
+
+message GetTodoRequest {
+    string id = 1;
+}
+
+message GetTodoResponse {
+    Todo todo = 1;
+}
+
+message GetTodosRequest {
+    uint64 skip = 1;
+    uint64 take = 2;
+}
+
+message GetTodosResponse {
+    repeated Todo todos = 1;
+}
+
+service TodoService {
+    rpc PostTodo (PostTodoRequest) returns (PostTodoResponse) {
+    }
+    rpc GetTodo (GetTodoRequest) returns (GetTodoResponse) {
+    }
+    rpc GetTodos (GetTodosRequest) returns (GetTodosResponse) {
+    }
+}
