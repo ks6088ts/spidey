@@ -10,9 +10,6 @@ services:
     environment:
       DATABASE_URL: postgres://spidey:123456@account_db/spidey?sslmode=disable
     restart: on-failure
-    # for testing purpose
-    ports:
-      - 8080:8080
 
   catalog:
     build:
@@ -75,4 +72,17 @@ services:
       POSTGRES_DB: spidey
       POSTGRES_USER: spidey
       POSTGRES_PASSWORD: 123456
+    restart: unless-stopped
+
+  todo_db:
+    build:
+      context: ./todo
+      dockerfile: ./db.dockerfile
+    environment:
+      POSTGRES_DB: ${TODO_DB_POSTGRES_DB}
+      POSTGRES_USER: ${TODO_DB_POSTGRES_USER}
+      POSTGRES_PASSWORD: ${TODO_DB_POSTGRES_PASSWORD}
+    # for testing only
+    # ports:
+    #   - 5432:5432
     restart: unless-stopped
