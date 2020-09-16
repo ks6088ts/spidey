@@ -1,0 +1,36 @@
+name: test
+
+on: [push]
+
+jobs:
+  test:
+    strategy:
+      matrix:
+        go-version: [1.13.x, 1.14.x]
+        platform: [ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.platform }}
+    steps:
+      - name: Install Go
+        uses: actions/setup-go@v1
+        with:
+          go-version: ${{ matrix.go-version }}
+      # https://github.com/actions/setup-go/issues/14#issuecomment-563273583
+      - name: setup env
+        run: |
+          echo "::set-env name=GOPATH::$(go env GOPATH)"
+          echo "::add-path::$(go env GOPATH)/bin"
+        shell: bash
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: setup grpc
+        run: |
+          make -f build/grpc.mk install
+          make -f build/grpc.mk protoc
+          make -f build/grpc.mk test
+      - name: setup cobra
+        run: |
+          make -f build/cobra.mk install
+          make -f build/cobra.mk init
+          make -f build/cobra.mk add CMD=test
+          make -f build/cobra.mk build
+          make -f build/cobra.mk test

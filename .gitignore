@@ -1,1 +1,5 @@
 .idea/
+*.pb.go
+bin
+todo/cmd/test.go
+.env

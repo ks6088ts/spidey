@@ -73,3 +73,33 @@ services:
       POSTGRES_USER: spidey
       POSTGRES_PASSWORD: 123456
     restart: unless-stopped
+
+  todo:
+    build:
+      args:
+        - http_proxy=${HTTP_PROXY}
+        - https_proxy=${HTTPS_PROXY}
+      context: .
+      dockerfile: ./todo/app.dockerfile
+    depends_on:
+      - todo_db
+    command: |
+      todo run --url="postgres://${TODO_DB_POSTGRES_USER}:${TODO_DB_POSTGRES_PASSWORD}@${TODO_DB_POSTGRES_HOST}/${TODO_DB_POSTGRES_DB}?sslmode=disable"
+    # tty: true
+    # for testing only
+    # ports:
+    #   - 8080:8080
+    restart: on-failure
+
+  todo_db:
+    build:
+      context: ./todo
+      dockerfile: ./db.dockerfile
+    environment:
+      POSTGRES_DB: ${TODO_DB_POSTGRES_DB}
+      POSTGRES_USER: ${TODO_DB_POSTGRES_USER}
+      POSTGRES_PASSWORD: ${TODO_DB_POSTGRES_PASSWORD}
+    # for testing only
+    # ports:
+    #   - 5432:5432
+    restart: unless-stopped
