@@ -37,7 +37,7 @@ ifeq ($(OS),Darwin)
 	sudo unzip -o $(PROTOC_ZIP) -d /usr/local 'include/*'
 	rm -f $(PROTOC_ZIP)
 else ifeq ($(OS),Linux)
-	sudo apt-get install -y protobuf-compiler
+	sudo -E apt-get install -y protobuf-compiler
 else
 	@# windows
 	$(eval PROTOC_VERSION ?= 3.13.0)
