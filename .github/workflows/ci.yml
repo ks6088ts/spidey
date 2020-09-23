@@ -34,3 +34,6 @@ jobs:
           make -f build/cobra.mk add CMD=test
           make -f build/cobra.mk build
           make -f build/cobra.mk test
+      - name: setup gqlgen
+        run: |
+          make -f build/gqlgen.mk install
