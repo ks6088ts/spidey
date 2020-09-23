@@ -2,17 +2,6 @@
 
 package model
 
-import (
-	"time"
-)
-
 type CreateTodoInput struct {
-	Name   string `json:"name"`
-	UserID string `json:"userId"`
-}
-
-type Todo struct {
-	ID        string    `json:"id"`
-	Name      string    `json:"name"`
-	CreatedAt time.Time `json:"createdAt"`
+	Name string `json:"name"`
 }

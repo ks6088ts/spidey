@@ -7,15 +7,16 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/ks6088ts/spidey/api/domains"
 	"github.com/ks6088ts/spidey/api/graph/generated"
 	"github.com/ks6088ts/spidey/api/graph/model"
 )
 
-func (r *mutationResolver) CreateTodo(ctx context.Context, input model.CreateTodoInput) (*model.Todo, error) {
+func (r *mutationResolver) CreateTodo(ctx context.Context, input model.CreateTodoInput) (*domains.Todo, error) {
 	panic(fmt.Errorf("not implemented"))
 }
 
-func (r *queryResolver) Todos(ctx context.Context) ([]*model.Todo, error) {
+func (r *queryResolver) Todos(ctx context.Context) ([]*domains.Todo, error) {
 	panic(fmt.Errorf("not implemented"))
 }
 

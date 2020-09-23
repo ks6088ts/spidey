@@ -14,7 +14,6 @@ type Query {
 
 input CreateTodoInput {
   name: String!
-  userId: String!
 }
 
 type Mutation {
