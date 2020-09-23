@@ -25,7 +25,7 @@ services:
 docker-compose up -d --build
 ```
 
-[gRPCサーバーの動作確認をgrpcurlでやってみた](https://qiita.com/yukina-ge/items/a84693f01f3f0edba482) を参考に grpcurl による動作確認
+[gRPC サーバーの動作確認を grpcurl でやってみた](https://qiita.com/yukina-ge/items/a84693f01f3f0edba482) を参考に grpcurl による動作確認
 
 ```bash
 > grpcurl -plaintext localhost:8080 list
@@ -56,5 +56,41 @@ EOM # WindowsではCtrl+Z、Unix系ではCtrl+D
       "name": "hello"
     }
   ]
+}
+```
+
+# GraphQL
+
+## gqlgen
+
+API サーバの実装入門として [開発ライブ実況 #2 GoLand 編 (メルペイ Solutions チーム デフォルト好きエンジニア)](https://www.youtube.com/watch?v=8MdxqDb07eQ) を参照した。
+
+```
+query {
+  todos {
+    text
+  }
+}
+
+mutation Create {
+  createTodo(input: {text: "text A"}) {
+    id
+    text
+    done
+    doneAt
+  }
+}
+
+mutation Update {
+  updateTodo(
+    input: {
+      id: "49337d7b-efaf-4821-99dc-299e56ceba4a"
+      text: "text A!"
+      done: false
+    }
+  ){
+    id
+    text
+  }
 }
 ```
