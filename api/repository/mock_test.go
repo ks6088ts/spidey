@@ -1,15 +1,16 @@
-package domains
+package repository
 
 import (
 	"context"
 	"testing"
+	"github.com/ks6088ts/spidey/api/domains"
 )
 
 func Test_todoRepository(t *testing.T) {
 	ctx := context.Background()
-	repo := NewTodoRepository()
+	repo := NewMockTodoRepository()
 
-	todoA, err := repo.Create(ctx, &Todo{
+	todoA, err := repo.Create(ctx, &domains.Todo{
 		Name: "test A",
 	})
 
@@ -20,7 +21,7 @@ func Test_todoRepository(t *testing.T) {
 		t.Errorf("unexpected: %#v", v)
 	}
 
-	_, err = repo.Update(ctx, &Todo{
+	_, err = repo.Update(ctx, &domains.Todo{
 		ID:   todoA.ID,
 		Name: "test A!",
 	})
@@ -36,7 +37,7 @@ func Test_todoRepository(t *testing.T) {
 		t.Errorf("unexpected: %#v, %#v", v1, v2)
 	}
 
-	todoB, err := repo.Create(ctx, &Todo{
+	todoB, err := repo.Create(ctx, &domains.Todo{
 		Name: "test B",
 	})
 	if err != nil {
