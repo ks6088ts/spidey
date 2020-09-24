@@ -68,16 +68,17 @@ API サーバの実装入門として [開発ライブ実況 #2 GoLand 編 (メ�
 ```
 query {
   todos {
-    text
+    id
+    name
+    createdAt
   }
 }
 
 mutation Create {
-  createTodo(input: {text: "text A"}) {
+  createTodo(input: {name: "text A"}) {
     id
-    text
-    done
-    doneAt
+    name
+    createdAt
   }
 }
 
@@ -85,12 +86,11 @@ mutation Update {
   updateTodo(
     input: {
       id: "49337d7b-efaf-4821-99dc-299e56ceba4a"
-      text: "text A!"
-      done: false
+      name: "text A!"
     }
   ){
     id
-    text
+    name
   }
 }
 ```

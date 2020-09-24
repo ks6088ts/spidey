@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -12,7 +13,7 @@ import (
 	"github.com/ks6088ts/spidey/api/repository"
 )
 
-const defaultPort = "8080"
+const defaultPort = "8081"
 
 func main() {
 	port := os.Getenv("PORT")
@@ -20,8 +21,14 @@ func main() {
 		port = defaultPort
 	}
 
+	repo, err := repository.NewGrpcTodoRepository("localhost:8080")
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
 	srv := handler.NewDefaultServer(generated.NewExecutableSchema(generated.Config{Resolvers: &graph.Resolver{
-		TodoRepository: repository.NewMockTodoRepository(),
+		TodoRepository: repo,
 	}}))
 
 	http.Handle("/", playground.Handler("GraphQL playground", "/query"))
